@@ -19,10 +19,10 @@ echo "Extracting archive"
 tar xf /vagrant/data/$1-dump.sql.tar.gz -C /vagrant/data/;
 
 echo "Deleting exited tables"
-PGPASSWORD=dev psql -h localhost -U dev dev -t -c "select 'drop table if exists \"' || tablename || '\" cascade;' from pg_tables  where schemaname = 'public';" | PGPASSWORD=dev psql -h localhost -U dev dev
+PGPASSWORD=$1-dev psql -h localhost -U $1-dev $1-dev -t -c "select 'drop table if exists \"' || tablename || '\" cascade;' from pg_tables  where schemaname = 'public';" | PGPASSWORD=$1-dev psql -h localhost -U $1-dev $1-dev
 
 echo "Rolling out tables"
-PGPASSWORD=dev psql -h localhost -U dev dev < /vagrant/data/tmp/$1-dump.sql;
+PGPASSWORD=$1-dev psql -h localhost -U $1-dev $1-dev < /vagrant/data/tmp/$1-dump.sql;
 
 echo "Cleaning up dumps"
 rm -f /vagrant/data/tmp/$1-dump.sql; rm -f /vagrant/data/$1-dump.sql.tar.gz
